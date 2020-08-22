@@ -1,5 +1,9 @@
 import { HuluNode } from '../types/index';
 
+function setAttribute(element: HTMLElement, key: string, value: any) {
+    element.setAttribute(key, String(value));
+}
+
 function render(huluNode: HuluNode, container: HTMLElement | null): void {
     let root = container ?? document.body;
 
@@ -17,20 +21,41 @@ function render(huluNode: HuluNode, container: HTMLElement | null): void {
         return;
     }
 
-    if (typeof huluNode.type === 'string') {
-        let element = document.createElement(huluNode.type);
+    try {
+        if (typeof huluNode.type === 'string') {
+            let element = document.createElement(huluNode.type);
 
-        huluNode.children.forEach((child: HuluNode) => {
-            render(child, element);
-        });
+            // attribute
+            Object.entries(huluNode.props ?? {}).forEach(([key, value]) => {
+                setAttribute(element, key, value);
+            });
 
-        root.appendChild(element);
-    } else {
-        let comp = new huluNode.type();
-        huluNode.children.forEach((child: HuluNode) => {
-            comp.appendChild(child);
-        });
-        render(comp.render(), root);
+            huluNode.children.forEach((child: HuluNode) => {
+                render(child, element);
+            });
+
+            root.appendChild(element);
+            return;
+        }
+
+        if (typeof huluNode.type === 'function') {
+            if (huluNode.type.prototype.render) {
+                let comp = new huluNode.type();
+                huluNode.children.forEach((child: HuluNode) => {
+                    comp.appendChild(child);
+                });
+                render(comp.render(), root);
+                return;
+            }
+
+            let _huluNode = huluNode.type();
+            render(_huluNode, root);
+        }
+    } catch (e) {
+        console.debug('catch', huluNode);
+        let txt = document.createTextNode(String(huluNode));
+        root.appendChild(txt);
+        return;
     }
 }
 

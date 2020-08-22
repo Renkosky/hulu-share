@@ -18,15 +18,29 @@ class Abc extends Hulu.Component {
     render() {
         return (
             <div>
-                {a} {this.children}
+                {a} {this.props.children}
             </div>
         );
     }
 }
 
+function Def() {
+    return (
+        <div>
+            <header>静夜思</header>
+        </div>
+    );
+}
+
 Hulu.render(
     <Abc>
         <div>引无数英雄竞折腰</div>
+        <Def>
+            <ul>
+                <li>床前明月光</li>
+                <li>疑似地上霜</li>
+            </ul>
+        </Def>
     </Abc>,
     document.getElementById('root')
 );

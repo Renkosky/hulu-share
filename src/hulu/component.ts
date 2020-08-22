@@ -1,13 +1,14 @@
 import { HuluNode } from '../types/index';
 
 class Component {
-    children: HuluNode[];
+    props: Record<string, any> = {};
+
     constructor() {
-        this.children = [];
+        this.props.children = [];
     }
 
     appendChild(child: HuluNode): void {
-        this.children.push(child);
+        this.props.children.push(child);
     }
 
     render(): HuluNode {
