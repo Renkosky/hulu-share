@@ -14,16 +14,18 @@ const a = (
     </div>
 );
 
-class Abc extends Hulu.Component {
-    render() {
-        return (
-            <div>
-                {a} {this.children}
-            </div>
-        );
-    }
+// class Abc extends Hulu.Component {
+//     render() {
+//         return (
+//             <div>
+//                 {a} {this.children}
+//             </div>
+//         );
+//     }
+// }
+function Abc() {
+    return <div>{a}123444</div>;
 }
-
 Hulu.render(
     <Abc>
         <div>引无数英雄竞折腰</div>
